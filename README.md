@@ -19,6 +19,9 @@ Explore ports and adapters architecture in go
 │   │   │   │   │   ├── <resource_2>
 │   │   │   │   │      └── <resource_2>.go
 │   │   │   │   └── server.go
+│   │   │   ├── storage
+│   │   │   │   ├── <storage_name>
+│   │   │   │   │   └── <storage_name>.go
 .
 ```
 
@@ -32,3 +35,5 @@ Explore ports and adapters architecture in go
 |          internal/platform/server           | Server code                                   |
 |      internal/platform/server/handler       | Bunch of each server entry point              |
 | internal/platform/server/handler/<resource> | Entry point code for a functionally `reource` |
+|              internal/storage               | Storage code, means all persistence tool      |
+|       internal/storage/<storage_name>       | Concrete implementation of persistence        |
