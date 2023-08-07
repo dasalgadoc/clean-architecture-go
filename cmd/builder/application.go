@@ -3,12 +3,15 @@ package builder
 import (
 	"github.com/dasalgadoc/clean-architecture-go/internal/application"
 	"github.com/dasalgadoc/clean-architecture-go/internal/domain"
+	"github.com/dasalgadoc/clean-architecture-go/internal/platform/bus/memory"
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/storage/mysql"
+	"github.com/dasalgadoc/clean-architecture-go/shared/command"
 )
 
 type (
 	Application struct {
 		CourseCreator application.CourseCreator
+		CommandBus    command.CommandBus
 	}
 
 	repositories struct {
@@ -24,6 +27,7 @@ func BuildApplication() (*Application, error) {
 
 	return &Application{
 		CourseCreator: application.NewCourseCreator(repos.CourseRepository),
+		CommandBus:    memory.NewCommandBus(),
 	}, nil
 }
 

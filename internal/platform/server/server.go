@@ -10,14 +10,16 @@ import (
 )
 
 type EntryPoints struct {
-	courseCreator course.PostCourseCreator
+	courseCreator               course.PostCourseCreator
+	courseCreatorCommandHandler course.PostCourseCreatorAsync
 }
 
 func New(application builder.Application, port string) *http.Server {
 	engine := gin.Default()
 
 	entryPoints := EntryPoints{
-		courseCreator: course.NewPostCourseCreator(application.CourseCreator),
+		courseCreator:               course.NewPostCourseCreator(application.CourseCreator),
+		courseCreatorCommandHandler: course.NewPostCourseCreatorAsync(application.CommandBus),
 	}
 
 	registerRoutes(entryPoints, engine)
@@ -33,4 +35,5 @@ func New(application builder.Application, port string) *http.Server {
 func registerRoutes(entryPoints EntryPoints, engine *gin.Engine) {
 	engine.GET("/health", health.CheckHandler())
 	engine.POST("/course", entryPoints.courseCreator.Do)
+	engine.POST("/course/async", entryPoints.courseCreatorCommandHandler.Do)
 }
