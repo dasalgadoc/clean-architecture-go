@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"github.com/dasalgadoc/clean-architecture-go/internal/domain"
@@ -13,7 +14,7 @@ type MysqlCourseRepository struct {
 	db *sql.DB
 }
 
-func (r *MysqlCourseRepository) Save(course domain.Course) error {
+func (r *MysqlCourseRepository) Save(ctx context.Context, course domain.Course) error {
 	stmt, err := r.db.Prepare("INSERT INTO course(id, name) VALUES(?,?)")
 	if err != nil {
 		return err

@@ -1,5 +1,7 @@
 package domain
 
+import "context"
+
 type CourseRepository interface {
-	Save(c Course) error
+	Save(ctx context.Context, c Course) error
 }

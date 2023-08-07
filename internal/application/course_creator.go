@@ -15,7 +15,7 @@ func (cc *CourseCreator) Invoke(ctx context.Context, name string) error {
 		return err
 	}
 
-	return cc.courseRepository.Save(*course)
+	return cc.courseRepository.Save(ctx, *course)
 }
 
 func NewCourseCreator(r domain.CourseRepository) CourseCreator {
