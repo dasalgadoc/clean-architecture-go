@@ -1,15 +1,26 @@
 package server
 
 import (
+	"github.com/dasalgadoc/clean-architecture-go/cmd/builder"
+	"github.com/dasalgadoc/clean-architecture-go/internal/platform/server/handler/course"
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/server/handler/health"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
 )
 
-func New(port string) *http.Server {
+type EntryPoints struct {
+	courseCreator course.PostCourseCreator
+}
+
+func New(application builder.Application, port string) *http.Server {
 	engine := gin.Default()
-	registerRoutes(engine)
+
+	entryPoints := EntryPoints{
+		courseCreator: course.NewPostCourseCreator(application.CourseCreator),
+	}
+
+	registerRoutes(entryPoints, engine)
 
 	return &http.Server{
 		Addr:         port,
@@ -19,6 +30,7 @@ func New(port string) *http.Server {
 	}
 }
 
-func registerRoutes(engine *gin.Engine) {
+func registerRoutes(entryPoints EntryPoints, engine *gin.Engine) {
 	engine.GET("/health", health.CheckHandler())
+	engine.POST("/course", entryPoints.courseCreator.Do)
 }
