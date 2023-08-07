@@ -23,7 +23,7 @@ func (cc *PostCourseCreator) Do(c *gin.Context) {
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
 
-	err = cc.useCase.Invoke(request.Name)
+	err = cc.useCase.Invoke(c, request.Name)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError,
 			gin.H{
