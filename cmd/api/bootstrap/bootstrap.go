@@ -1,19 +1,27 @@
 package bootstrap
 
 import (
+	"context"
 	"github.com/dasalgadoc/clean-architecture-go/cmd/builder"
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/server"
+	"time"
 )
 
 const (
-	port = ":8081"
+	shutdownTimeout = 10 * time.Second
+	port            = ":8081"
 )
+
+type Server interface {
+	Run(ctx context.Context) error
+}
 
 func Run() error {
 	application, err := builder.BuildApplication()
 	if err != nil {
 		return err
 	}
-	srv := server.New(*application, port)
-	return srv.ListenAndServe()
+
+	ctx, srv := server.New(context.Background(), *application, port, shutdownTimeout)
+	return srv.Run(ctx)
 }
