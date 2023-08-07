@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/dasalgadoc/clean-architecture-go/internal/domain"
 	"log"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type MysqlCourseRepository struct {
