@@ -7,7 +7,7 @@ import (
 )
 
 type courseDto struct {
-	name string `json:"name" binding:"required"`
+	Name string `json:"name" binding:"required"`
 }
 
 type PostCourseCreator struct {
@@ -23,7 +23,7 @@ func (cc *PostCourseCreator) Do(c *gin.Context) {
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
 
-	err = cc.useCase.Invoke(request.name)
+	err = cc.useCase.Invoke(request.Name)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError,
 			gin.H{
