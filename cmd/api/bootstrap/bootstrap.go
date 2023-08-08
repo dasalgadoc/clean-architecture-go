@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	shutdownTimeout = 10 * time.Second
+	shutdownTimeout = 3 * time.Second
 	port            = ":8081"
 )
 

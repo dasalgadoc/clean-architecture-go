@@ -53,6 +53,7 @@ func New(
 }
 
 func registerRoutes(entryPoints EntryPoints, engine *gin.Engine) {
+	engine.Use(LoggerMiddleware())
 	engine.GET("/health", health.CheckHandler())
 	engine.POST("/course", entryPoints.courseCreator.Do)
 	engine.POST("/course/async", entryPoints.courseCreatorCommandHandler.Do)
@@ -93,4 +94,30 @@ func serverContext(ctx context.Context) context.Context {
 	}()
 
 	return ctx
+}
+
+func LoggerMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		start := time.Now()
+
+		c.Next()
+
+		end := time.Now()
+		latency := end.Sub(start)
+
+		fmt.Printf("[%s] REQ: %s - %v\n", end.Format("2006-01-02 15:04:05"), c.Request.URL.Path, latency)
+	}
+}
+
+func RecoverFromPanicsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		defer func() {
+			if err := recover(); err != nil {
+				fmt.Printf("panic: %v\n", err)
+				c.AbortWithStatus(http.StatusInternalServerError)
+			}
+		}()
+
+		c.Next()
+	}
 }
