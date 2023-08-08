@@ -6,12 +6,14 @@ import (
 	"fmt"
 	"github.com/dasalgadoc/clean-architecture-go/internal/domain"
 	"log"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type MysqlCourseRepository struct {
-	db *sql.DB
+	db        *sql.DB
+	dbTimeout time.Duration
 }
 
 func (r *MysqlCourseRepository) Save(ctx context.Context, course domain.Course) error {
@@ -21,7 +23,10 @@ func (r *MysqlCourseRepository) Save(ctx context.Context, course domain.Course) 
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(course.Id(), course.Name())
+	ctxTimeout, cancel := context.WithTimeout(ctx, r.dbTimeout)
+	defer cancel()
+
+	_, err = stmt.ExecContext(ctxTimeout, course.Id(), course.Name())
 	if err != nil {
 		return err
 	}
@@ -29,7 +34,7 @@ func (r *MysqlCourseRepository) Save(ctx context.Context, course domain.Course) 
 	return nil
 }
 
-func NewMysqlCourseRepository(user, password, host, port, database string) (*MysqlCourseRepository, error) {
+func NewMysqlCourseRepository(user, password, host, port, database string, timeout time.Duration) (*MysqlCourseRepository, error) {
 	connectionString := gerConnectionString(user, password, host, port, database)
 	db, err := sql.Open("mysql", connectionString)
 	if err != nil {
@@ -38,7 +43,8 @@ func NewMysqlCourseRepository(user, password, host, port, database string) (*Mys
 	}
 
 	return &MysqlCourseRepository{
-		db: db,
+		db:        db,
+		dbTimeout: timeout,
 	}, nil
 }
 

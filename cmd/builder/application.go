@@ -6,6 +6,7 @@ import (
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/bus/memory"
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/storage/mysql"
 	"github.com/dasalgadoc/clean-architecture-go/shared/command"
+	"time"
 )
 
 type (
@@ -37,8 +38,9 @@ func buildRepositories() (*repositories, error) {
 	host := "localhost"
 	port := "3306"
 	database := "clean_architecture_go"
+	timeout := 5 * time.Second
 
-	course, err := mysql.NewMysqlCourseRepository(user, password, host, port, database)
+	course, err := mysql.NewMysqlCourseRepository(user, password, host, port, database, timeout)
 	if err != nil {
 		return nil, err
 	}
