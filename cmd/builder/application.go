@@ -6,6 +6,7 @@ import (
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/bus/memory"
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/storage/mysql"
 	"github.com/dasalgadoc/clean-architecture-go/shared/command"
+	"github.com/dasalgadoc/clean-architecture-go/shared/event"
 	"time"
 )
 
@@ -13,6 +14,7 @@ type (
 	Application struct {
 		CourseCreator application.CourseCreator
 		CommandBus    command.CommandBus
+		EventBus      event.EventBus
 	}
 
 	repositories struct {
@@ -27,7 +29,7 @@ func BuildApplication() (*Application, error) {
 	}
 
 	return &Application{
-		CourseCreator: application.NewCourseCreator(repos.CourseRepository),
+		CourseCreator: application.NewCourseCreator(repos.CourseRepository, memory.NewEventBus()),
 		CommandBus:    memory.NewCommandBus(),
 	}, nil
 }

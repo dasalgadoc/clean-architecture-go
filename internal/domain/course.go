@@ -1,6 +1,11 @@
 package domain
 
+import (
+	shared "github.com/dasalgadoc/clean-architecture-go/shared/event"
+)
+
 type Course struct {
+	shared.AggregateRoot
 	id   CourseId
 	name CourseName
 }
@@ -23,10 +28,14 @@ func CreateCourse(name string) (*Course, error) {
 		return nil, err
 	}
 
-	return &Course{
+	course := &Course{
 		id:   *id,
 		name: *studentName,
-	}, nil
+	}
+
+	course.AggregateRoot.Record(NewCourseCreatedEvent(course.Id(), course.Name()))
+
+	return course, nil
 }
 
 func NewCourseWithId(id string, name string) (*Course, error) {

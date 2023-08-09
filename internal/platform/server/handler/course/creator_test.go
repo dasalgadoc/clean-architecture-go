@@ -18,6 +18,7 @@ type courseCreatorTestScenario struct {
 	writer           *httptest.ResponseRecorder
 	test             *testing.T
 	courseRepository *mocks.CourseRepositoryMock
+	eventBusMock     *mocks.EventBusMock
 
 	body []byte
 }
@@ -35,6 +36,7 @@ func TestGivenAValidRequestReturnCreated(t *testing.T) {
 	test.setup()
 	test.givenAName("OOP")
 	test.andCourseRepositoryReturnNoError()
+	test.andEventBusReturnNoError()
 	test.whenCreateCourseExecuted()
 	test.thenResponseShouldBeCreated()
 }
@@ -45,13 +47,15 @@ func startCourseCreatorTestScenario(t *testing.T) *courseCreatorTestScenario {
 	return &courseCreatorTestScenario{
 		test:             t,
 		courseRepository: new(mocks.CourseRepositoryMock),
+		eventBusMock:     new(mocks.EventBusMock),
 	}
 }
 
 func (c *courseCreatorTestScenario) setup() {
-	useCase := application.NewCourseCreator(c.courseRepository)
+	useCase := application.NewCourseCreator(c.courseRepository, c.eventBusMock)
 	target := NewPostCourseCreator(useCase)
 
+	gin.SetMode(gin.TestMode)
 	c.router = gin.Default()
 	c.router.POST("/course", target.Do)
 }
@@ -64,6 +68,10 @@ func (c *courseCreatorTestScenario) givenAName(name string) {
 
 func (c *courseCreatorTestScenario) andCourseRepositoryReturnNoError() {
 	c.courseRepository.On("Save", mock.Anything).Return(nil)
+}
+
+func (c *courseCreatorTestScenario) andEventBusReturnNoError() {
+	c.eventBusMock.On("Publish", mock.Anything).Return(nil)
 }
 
 func (c *courseCreatorTestScenario) whenCreateCourseExecuted() {
