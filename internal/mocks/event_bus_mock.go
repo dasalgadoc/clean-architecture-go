@@ -14,3 +14,7 @@ func (e *EventBusMock) Publish(_ context.Context, event []event.Event) error {
 	args := e.Called()
 	return args.Error(0)
 }
+
+func (e *EventBusMock) Subscribe(event event.Type, handler event.Handler) {
+	e.Called(event, handler)
+}
