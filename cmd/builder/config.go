@@ -12,8 +12,8 @@ type config struct {
 	// Database
 	DbUser     string        `default:"root"`
 	DbPassword string        `default:"root"`
-	DbHost     string        `default:"localhost"`
-	DbPort     uint          `default:"3306"`
+	DbHost     string        `default:"mysql"` // Docker container name or localhost
+	DbPort     string        `default:"3306"`
 	DbName     string        `default:"test"`
 	DbTimeout  time.Duration `default:"5s"`
 }

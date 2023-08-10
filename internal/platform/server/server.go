@@ -40,7 +40,7 @@ func New(
 
 	srv := Server{
 		Server: &http.Server{
-			Addr:         port,
+			Addr:         fmt.Sprintf(":%s", port),
 			Handler:      engine,
 			ReadTimeout:  15 * time.Second,
 			WriteTimeout: 15 * time.Second,

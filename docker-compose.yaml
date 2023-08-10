@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  clean-api:
+    build: .
+    environment:
+      CLEAN_HOST: 0.0.0.0
+      CLEAN_DBHOST: mysql
+    ports:
+      - 8085:8081
+
+  mysql:
+    image: mysql:8.0.22
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: test
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+
+volumes:
+  mysql_data:

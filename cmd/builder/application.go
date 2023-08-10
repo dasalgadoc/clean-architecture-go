@@ -57,10 +57,11 @@ func getConfiguration() (*config, error) {
 }
 
 func buildRepositories(config *config) (*repositories, error) {
-	course, err := mysql.NewMysqlCourseRepository(config.DbUser,
+	course, err := mysql.NewMysqlCourseRepository(
+		config.DbUser,
 		config.DbPassword,
 		config.DbHost,
-		config.DbHost,
+		config.DbPort,
 		config.DbName,
 		config.DbTimeout)
 	if err != nil {

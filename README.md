@@ -54,6 +54,10 @@ docker-compose build
 docker-compose up -d
 ```
 
+```bash
+docker exec -it cqrs-java-mysql-container-1 bash
+```
+
 # 📕Recommended libraries
 
 - [Envconfig](https://github.com/kelseyhightower/envconfig) for environment variables

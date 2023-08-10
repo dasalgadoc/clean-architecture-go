@@ -17,7 +17,7 @@ type MysqlCourseRepository struct {
 }
 
 func (r *MysqlCourseRepository) Save(ctx context.Context, course domain.Course) error {
-	stmt, err := r.db.Prepare("INSERT INTO course(id, name) VALUES(?,?)")
+	stmt, err := r.db.Prepare("INSERT INTO courses(id, name) VALUES(?,?)")
 	if err != nil {
 		return err
 	}
