@@ -1,7 +1,57 @@
-# clean-architecture-go
-Explore ports and adapters architecture in go
+<h1 align="center">
+  🚀 🐹 Clean Architecture in Go 🐹 🚀
+</h1>
 
-## Folder structure
+<p align="center">
+    <a href="#"><img src="https://img.shields.io/badge/technology-go-blue.svg" alt="Go"/></a>
+</p>
+<p align="center">
+  This repository explore ports and adapters architecture in Go.
+</p>
+
+## 🧲 Environment Setup
+
+### 🛠️ Needed tools
+
+1. Go 1.20 (recommended)
+2. Docker and docker compose are recommended but not required
+
+### 🏃🏻 Application execution
+
+1. Make sure to download all Needed tools
+2. Clone the repository
+```bash
+git clone https://github.com/dasalgadoc/clean-architecture-go.git
+```
+3. Build up go project
+```bash
+go get .
+```
+
+4. Run the API
+
+Build the project
+```bash
+docker-compose build
+```
+
+Run the project
+```bash
+docker-compose up -d
+```
+
+An util command to see a docker
+```bash
+docker exec -it <NAME> bash
+```
+
+## 🧳 Project explanation
+
+A clean architecture is an architectural pattern that separates the elements of a software application into different layers, so that it is easier to manage and develop the application. The main idea is that the application should be independent of the database, the UI, the framework, etc. This allows you to test the application without any of these elements. The clean architecture is based on the SOLID principles.
+
+In Go, the clean architecture is based on the following elements:
+
+### Folder structure
 
 ```
 .
@@ -46,18 +96,9 @@ Explore ports and adapters architecture in go
 | internal/platform/server | middleware | Middleware functions                               |
 |    internal/platform     |  storage   | Storage code, means all persistence tool           |
 
-```bash
-docker-compose build
-```
-
-```bash
-docker-compose up -d
-```
-
-```bash
-docker exec -it cqrs-java-mysql-container-1 bash
-```
 
 # 📕Recommended libraries
 
 - [Envconfig](https://github.com/kelseyhightower/envconfig) for environment variables
+- [Wire](https://github.com/google/wire) for dependency injection by Google
+- [fx](https://github.com/uber-go/fx) for dependency injection by Uber
