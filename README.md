@@ -45,3 +45,15 @@ Explore ports and adapters architecture in go
 | internal/platform/server |  handler   | Bunch of each server entry point                   |
 | internal/platform/server | middleware | Middleware functions                               |
 |    internal/platform     |  storage   | Storage code, means all persistence tool           |
+
+```bash
+docker-compose build
+```
+
+```bash
+docker-compose up -d
+```
+
+# 📕Recommended libraries
+
+- [Envconfig](https://github.com/kelseyhightower/envconfig) for environment variables

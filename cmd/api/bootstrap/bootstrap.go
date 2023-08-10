@@ -4,12 +4,6 @@ import (
 	"context"
 	"github.com/dasalgadoc/clean-architecture-go/cmd/builder"
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/server"
-	"time"
-)
-
-const (
-	shutdownTimeout = 3 * time.Second
-	port            = ":8081"
 )
 
 type Server interface {
@@ -21,6 +15,9 @@ func Run() error {
 	if err != nil {
 		return err
 	}
+
+	port := application.Config.Port
+	shutdownTimeout := application.Config.ShutdownTimeout
 
 	ctx, srv := server.New(context.Background(), *application, port, shutdownTimeout)
 	return srv.Run(ctx)

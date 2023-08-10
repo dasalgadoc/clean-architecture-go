@@ -8,11 +8,12 @@ import (
 	"github.com/dasalgadoc/clean-architecture-go/internal/platform/storage/mysql"
 	"github.com/dasalgadoc/clean-architecture-go/shared/command"
 	"github.com/dasalgadoc/clean-architecture-go/shared/event"
-	"time"
+	"github.com/kelseyhightower/envconfig"
 )
 
 type (
 	Application struct {
+		Config        config
 		CourseCreator application.CourseCreator
 		CommandBus    command.CommandBus
 		EventBus      event.EventBus
@@ -24,7 +25,12 @@ type (
 )
 
 func BuildApplication() (*Application, error) {
-	repos, err := buildDummyRepositories()
+	appConfig, err := getConfiguration()
+	if err != nil {
+		return nil, err
+	}
+
+	repos, err := buildRepositories(appConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -34,21 +40,29 @@ func BuildApplication() (*Application, error) {
 		application.NewCourseCounter())
 
 	return &Application{
+		Config:        *appConfig,
 		CourseCreator: application.NewCourseCreator(repos.CourseRepository, eventBus),
 		CommandBus:    memory.NewCommandBus(),
 		EventBus:      eventBus,
 	}, nil
 }
 
-func buildRepositories() (*repositories, error) {
-	user := "root"
-	password := "root"
-	host := "localhost"
-	port := "3306"
-	database := "clean_architecture_go"
-	timeout := 5 * time.Second
+func getConfiguration() (*config, error) {
+	var cfg config
+	err := envconfig.Process("CLEAN", &cfg)
+	if err != nil {
+		return nil, err
+	}
+	return &cfg, nil
+}
 
-	course, err := mysql.NewMysqlCourseRepository(user, password, host, port, database, timeout)
+func buildRepositories(config *config) (*repositories, error) {
+	course, err := mysql.NewMysqlCourseRepository(config.DbUser,
+		config.DbPassword,
+		config.DbHost,
+		config.DbHost,
+		config.DbName,
+		config.DbTimeout)
 	if err != nil {
 		return nil, err
 	}
